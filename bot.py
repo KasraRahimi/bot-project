@@ -1,6 +1,15 @@
 import discord
-from discord import app_commands
-from discord.ext import commands
+
+PREFIX = "pomo "
+
+def response(msg: str, user, channel):
+    
+    if msg.lower() == PREFIX + "hello":
+        username = str(user).split("#")[0]
+        return f"Hello, {username}"
+    
+    if msg.lower() == PREFIX + "bye":
+        return f"Oh ok ;-; bye ig"
 
 with open("token.txt") as f:
     token = f.readline()
@@ -17,9 +26,11 @@ def runDiscordBot():
         contents = msg.content
         user = msg.author
         channel = msg.channel
-        print("New message")
-        print(f"\tuser = {user}")
-        print(f"\tmessage = {contents}")
-        print(f"\tchannel = {channel}\n")
+
+        if user == bot.user:
+            return
+
+        if contents[:5] == PREFIX:
+            await channel.send(response(contents, user, channel))
     
     bot.run(token)
