@@ -1,36 +1,17 @@
 import discord
-
-PREFIX = "pomo "
-
-def response(msg: str, user, channel):
-    
-    if msg.lower() == PREFIX + "hello":
-        username = str(user).split("#")[0]
-        return f"Hello, {username}"
-    
-    if msg.lower() == PREFIX + "bye":
-        return f"Oh ok ;-; bye ig"
+from discord.ext import commands
 
 with open("token.txt") as f:
     token = f.readline()
 
 def runDiscordBot():
-    bot = discord.Client(intents=discord.Intents.all())
+    bot = commands.Bot(intents=discord.Intents.all(), command_prefix="pomo-")
 
     @bot.event
     async def on_ready():
         print(f"{bot.user} is ready.")
 
-    @bot.event
-    async def on_message(msg: discord.Message):
-        contents = msg.content
-        user = msg.author
-        channel = msg.channel
-
-        if user == bot.user:
-            return
-
-        if contents[:5] == PREFIX:
-            await channel.send(response(contents, user, channel))
-    
+    @bot.command()
+    async def hello(ctx: commands.Context):
+        await ctx.send("Hi, I'm currently not functional")
     bot.run(token)
